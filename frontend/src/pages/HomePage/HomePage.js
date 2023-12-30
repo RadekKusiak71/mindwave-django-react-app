@@ -33,7 +33,6 @@ const HomePage = () => {
 					} else {
 						setPosts(data);
 					}
-					console.log(data);
 				} else {
 					setErr(data);
 				}
@@ -68,6 +67,7 @@ const HomePage = () => {
 						<Post
 							key={post.id}
 							username={post.profile_username}
+							postId={post.id}
 							profilePic={post.profile_picture}
 							firstName={post.profile_first_name}
 							lastName={post.profile_last_name}
@@ -76,6 +76,7 @@ const HomePage = () => {
 							createdDate={post.created_date}
 							postBody={post.body}
 							profileId={post.profile}
+							isLiked={post.is_liked_by_user}
 						/>
 					))}
 				</div>

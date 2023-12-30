@@ -103,7 +103,6 @@ export const AuthProvider = ({ children }) => {
 				if (response.ok) {
 					setAuthTokens(data);
 					setUser(jwtDecode(data.access));
-					console.log(data.access);
 					localStorage.setItem("authTokens", JSON.stringify(data));
 				} else {
 					setAuthErr(data);
@@ -116,7 +115,6 @@ export const AuthProvider = ({ children }) => {
 		let fourMins = 1000 * 60 * 4;
 		let interval = setInterval(() => {
 			if (authTokens) {
-				console.log("updating tokens");
 				updateToken();
 			}
 		}, fourMins);
