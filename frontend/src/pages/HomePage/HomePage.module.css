@@ -26,4 +26,10 @@
 }
 .posts-home-container{
     padding: 40px 0 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    flex-shrink: 1;
 }

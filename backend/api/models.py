@@ -19,7 +19,7 @@ class Profile(models.Model):
         return self.user.username
     
     #Method to check if user posted today
-    def checkTodaysPost(self):
+    def check_if_posted(self):
         today = datetime.today().date()
         todays_posts = self.post_set.filter(created_date__date=today)
         if todays_posts.exists():
@@ -42,6 +42,14 @@ class Post(models.Model):
 
     def __str__(self):
         return f'Post created by {self.profile.user.username} at {self.created_date}'
+
+    def get_posts_likes_count(self):
+        likes = Like.objects.filter(post=self).count()
+        return likes
+    
+    def get_posts_comments_count(self):
+        comments = Comment.objects.filter(post=self).count()
+        return comments
 
 class Like(models.Model):
     post = models.ForeignKey(Post,on_delete=models.CASCADE)

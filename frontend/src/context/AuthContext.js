@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 			if (response.ok) {
 				// Setting authentication data ( user from decoded token and passing tokens to localstorage )
 				setAuthTokens(data);
-				setUser(jwtDecode(JSON.stringify(data.access)));
+				setUser(jwtDecode(data.access));
 				localStorage.setItem("authTokens", JSON.stringify(data));
 				navigate("/");
 			} else {
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }) => {
 
 	useEffect(() => {
 		// Update tokens function can be changed into callback if needed
-		const updateTokens = async () => {
+		const updateToken = async () => {
 			try {
 				let response = await fetch(
 					"http://127.0.0.1:8000/api/token/refresh/",
@@ -96,13 +96,14 @@ export const AuthProvider = ({ children }) => {
 						headers: {
 							"Content-Type": "application/json",
 						},
-						body: JSON.stringify({ refresh: authTokens.refresh }),
+						body: JSON.stringify({ refresh: authTokens?.refresh }),
 					}
 				);
 				let data = await response.json();
 				if (response.ok) {
 					setAuthTokens(data);
-					setUser(jwtDecode(JSON.stringify(data.access)));
+					setUser(jwtDecode(data.access));
+					console.log(data.access);
 					localStorage.setItem("authTokens", JSON.stringify(data));
 				} else {
 					setAuthErr(data);
@@ -112,9 +113,15 @@ export const AuthProvider = ({ children }) => {
 			}
 		};
 
-		let time = 1000 * 60 * 4;
-		const timeout = setTimeout(() => updateTokens(), time);
-		return () => clearTimeout(timeout);
+		let fourMins = 1000 * 60 * 4;
+		let interval = setInterval(() => {
+			if (authTokens) {
+				console.log("updating tokens");
+				updateToken();
+			}
+		}, fourMins);
+
+		return () => clearInterval(interval);
 	}, [authTokens]);
 
 	return (

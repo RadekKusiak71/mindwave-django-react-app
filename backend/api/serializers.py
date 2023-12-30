@@ -7,7 +7,7 @@ from django.contrib.auth.password_validation import validate_password
 from .models import Profile,Comment,Post,Like,FriendRequest
 
 class ProfileSerializer(serializers.ModelSerializer):
-    posted_today = serializers.BooleanField(source='checkTodaysPost')
+    posted_today = serializers.BooleanField(source='check_if_posted')
     class Meta:
         model= Profile
         fields = '__all__'
@@ -18,6 +18,14 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PostSerializer(serializers.ModelSerializer):
+    profile_picture = serializers.CharField(source="profile.profile_picture",required=False)
+    profile_username = serializers.CharField(source="profile.user.username",required=False)
+    profile_first_name = serializers.CharField(source="profile.user.first_name",required=False)
+    profile_last_name = serializers.CharField(source="profile.user.last_name",required=False)
+    likes_count = serializers.IntegerField(source="get_posts_likes_count",required=False)
+    comments_count = serializers.IntegerField(source="get_posts_comments_count",required=False)
+    
+    
     class Meta:
         model= Post
         fields = '__all__'

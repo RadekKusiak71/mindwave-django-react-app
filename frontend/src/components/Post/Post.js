@@ -3,28 +3,30 @@ import classes from "./Post.module.css";
 import chatIcon from "../../assets/icons/Chatbubble.svg";
 import likeIcon from "../../assets/icons/Scrollup.svg";
 
-const Post = () => {
+const Post = (props) => {
 	return (
 		<div className={classes["post-container"]}>
 			<div className={classes["post-form-data"]}>
 				<img
 					className={classes["profile-image-home"]}
-					src="./x.jpg"
+					src={`http://127.0.0.1:8000/media/${props.profilePic}`}
 					alt="profile"
 				/>
 				<p className={classes["profile-data"]}>
-					Radoslaw Kusiak
+					{props.firstName} {props.lastName}
 					<br />
-					<span className={classes["profile-username"]}>@admin</span>
+					<span className={classes["profile-username"]}>
+						@{props.username}
+					</span>
 				</p>
 			</div>
-			<div className={classes["post-body"]}>loremipsum</div>
+			<div className={classes["post-body"]}>{props.postBody}</div>
 			<div className={classes["post-reactions"]}>
 				<button type="button" className={classes["post-react-button"]}>
-					<img src={likeIcon} alt="like" /> 350
+					<img src={likeIcon} alt="like" /> {props.likesCount}
 				</button>
 				<button type="button" className={classes["post-react-button"]}>
-					<img src={chatIcon} alt="comment" /> 360
+					<img src={chatIcon} alt="comment" /> {props.commentsCount}
 				</button>
 			</div>
 		</div>
