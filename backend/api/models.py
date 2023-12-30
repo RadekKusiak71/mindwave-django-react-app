@@ -51,6 +51,9 @@ class Post(models.Model):
         comments = Comment.objects.filter(post=self).count()
         return comments
 
+    def is_liked_by_user(self, user):
+        return Like.objects.filter(post=self, profile__user=user).exists()
+    
 class Like(models.Model):
     post = models.ForeignKey(Post,on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile,on_delete=models.CASCADE)

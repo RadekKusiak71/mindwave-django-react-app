@@ -24,12 +24,19 @@ class PostSerializer(serializers.ModelSerializer):
     profile_last_name = serializers.CharField(source="profile.user.last_name",required=False)
     likes_count = serializers.IntegerField(source="get_posts_likes_count",required=False)
     comments_count = serializers.IntegerField(source="get_posts_comments_count",required=False)
-    
+    is_liked_by_user = serializers.SerializerMethodField()
+
     
     class Meta:
         model= Post
         fields = '__all__'
 
+    def get_is_liked_by_user(self, obj):
+        user = self.context.get('user')
+        if user:
+            return obj.is_liked_by_user(user)
+        return False
+    
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model= Like

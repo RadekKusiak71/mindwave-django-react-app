@@ -65,15 +65,22 @@ class PostViewSet(viewsets.ViewSet):
         return Response(serializer_data, status=status.HTTP_200_OK)
    
     # Method providing fetching today posts only for users that are connected
-    @action(detail=False,methods=['GET'],url_path='daily')
-    def get_daily_posts(self,request):
+    @action(detail=False, methods=['GET'], url_path='daily')
+    def get_daily_posts(self, request):
         active_user_profile = Profile.objects.get(user=request.user)
         if not active_user_profile.check_if_posted():
-            return Response({"detail":"Too see other users posts you have to post something"},status=status.HTTP_200_OK)
+            return Response({"detail": "To see other users' posts, you have to post something"}, status=status.HTTP_200_OK)
+
         set_date = datetime.today().date()
-        todays_posts = Post.objects.filter(profile__friends = active_user_profile,created_date__date = set_date)
-        serializer_data = PostSerializer(todays_posts, many=True).data
+        todays_posts = Post.objects.filter(profile__friends=active_user_profile, created_date__date=set_date)
+        
+        # Pass the user to the serializer context to check if the user has liked each post
+        serializer_context = {'user': request.user}
+        serializer_data = PostSerializer(todays_posts, many=True, context=serializer_context).data
+
         return Response(serializer_data, status=status.HTTP_200_OK)
+    
+
     
     # Method providing liking and unliking post
     @action(detail=True,methods=['POST'],url_path='like')
@@ -86,13 +93,13 @@ class PostViewSet(viewsets.ViewSet):
         }
         if Like.objects.filter(post=post,profile=profile).exists():
             Like.objects.get(post=post,profile=profile).delete()
-            return Response({"detail": "Reacted successfully."}, status=status.HTTP_201_CREATED)
+            return Response({"detail": "Reacted successfully.","posts_likes":post.get_posts_likes_count()}, status=status.HTTP_201_CREATED)
         
         try:
             serializer = LikeSerializer(data=post_data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response({"detail": "Reacted successfully."}, status=status.HTTP_201_CREATED)
+            return Response({"detail": "Reacted successfully.","posts_likes":post.get_posts_likes_count()}, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
