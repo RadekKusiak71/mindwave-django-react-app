@@ -1,0 +1,30 @@
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/AuthPages/LoginPage";
+import RegisterPage from "./pages/AuthPages/RegisterPage";
+import HomePage from "./pages/HomePage/HomePage";
+import HeaderApplier from "./utils/HeaderApplier";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import { AuthProvider } from "./context/AuthContext";
+import PrivateRoutes from "./utils/PrivateRoutes";
+
+function App() {
+	return (
+		<Router>
+			<AuthProvider>
+				<Routes>
+					<Route path="/login" element={<LoginPage />} />
+					<Route path="/register" element={<RegisterPage />} />
+					<Route element={<PrivateRoutes />}>
+						<Route element={<HeaderApplier />}>
+							<Route path="/" element={<HomePage />} />
+							<Route path="/account" element={<ProfilePage />} />
+						</Route>
+					</Route>
+				</Routes>
+			</AuthProvider>
+		</Router>
+	);
+}
+
+export default App;

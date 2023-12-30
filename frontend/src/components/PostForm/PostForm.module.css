@@ -1,0 +1,82 @@
+.post-form-backdrop{
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: #000000a6;
+    display: flex;
+    justify-content: center;
+    padding-top: 200px;
+}
+.post-form-container{
+    width: 700px;
+    height: fit-content;
+    background-color: #000000;
+    border:1px solid #393E46;
+    border-radius: 10px;
+    transition: 0.3s ease-in-out;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+.post-form-user-data{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.post-form-data{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+.close-button{
+    all: unset;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+.close-button:hover{
+    scale: 1.2;
+}
+
+.profile-image-home{
+    height: 50px;
+    width: 50px;
+    border-radius: 1000px;
+    background-color: white;
+}
+.profile-data{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+.profile-username{
+    font-size:12px;
+}
+.textarea-post{
+    width: 100%;
+    height: 200px;
+    background-color: #000000;
+    border:1px solid #393E46;
+    margin-top: 20px;
+    border-radius: 20px;
+    padding: 20px;
+    color: #FFFFFF;
+    resize: none;
+}
+.post-form-button{
+    all: unset;
+    cursor: pointer;
+    width: 200px;
+    height: 50px;
+    border:1px solid #393E46;
+    border-radius: 20px;
+    text-align: center;
+    margin: auto;
+}

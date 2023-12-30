@@ -1,0 +1,8 @@
+.form-input{
+    all: unset;
+    width: 90%;
+    height: 50px;
+    border: 1px solid #393E46;
+    border-radius: 5px;
+    padding-left: 20px;
+}

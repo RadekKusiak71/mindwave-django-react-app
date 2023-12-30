@@ -1,0 +1,54 @@
+.post-container{
+    height: fit-content;
+    border: 1px solid #393E46;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    justify-content:center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+}
+.post-form-data{
+    height: fit-content;
+    padding: 2px 0 2px 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+.profile-image-home{
+    height: 50px;
+    width: 50px;
+    border-radius: 1000px;
+    background-color: white;
+}
+.profile-data{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+.profile-username{
+    font-size:12px;
+}
+.post-reactions{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 25px;
+}
+.post-react-button{
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 50px;
+}
+.post-react-button > img {
+    width: 25px;
+    height: 25px;
+}

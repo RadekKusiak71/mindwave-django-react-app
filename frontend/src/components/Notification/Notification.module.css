@@ -1,0 +1,27 @@
+.notification{
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    width: 300px;
+    min-height: 90px;
+    height: fit-content;
+    padding: 10px;
+    border: 1px solid #393E46;
+    border-radius: 20px;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+    transition: 0.3s ease-in-out;
+    z-index: 999;
+}
+
+.notification:hover{
+    border: 1px solid #FFFFFF;
+    color: white;
+    scale: 1.1;
+    right: 40px;
+    bottom: 30px;
+}
