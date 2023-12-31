@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import Card from "../../layout/Card";
 import classes from "./HomePage.module.css";
 import PostForm from "../../components/PostForm/PostForm";
@@ -9,40 +9,42 @@ import Notification from "../../components/Notification/Notification";
 const HomePage = () => {
 	const [open, setOpen] = useState(false);
 	const [err, setErr] = useState(null);
+	const [posted, setPosted] = useState(false);
 	const [posts, setPosts] = useState([]);
 	const { user, authTokens } = useContext(AuthContext);
 
-	useEffect(() => {
-		const fetchHomePosts = async () => {
-			try {
-				let response = await fetch(
-					"http://127.0.0.1:8000/api/posts/daily/",
-					{
-						method: "GET",
-						headers: {
-							Authorization: `Bearer ${authTokens.access}`,
-							"Content-Type": "application/json",
-						},
-					}
-				);
-				let data = await response.json();
-				if (response.ok) {
-					if (data.detail) {
-						setPosts([]);
-						setErr(data);
-					} else {
-						setPosts(data);
-					}
-				} else {
-					setErr(data);
+	const fetchHomePosts = useCallback(async () => {
+		try {
+			let response = await fetch(
+				"http://127.0.0.1:8000/api/posts/daily/",
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${authTokens.access}`,
+						"Content-Type": "application/json",
+					},
 				}
-			} catch (err) {
-				console.log(err);
+			);
+			let data = await response.json();
+			if (response.ok) {
+				if (data.detail) {
+					setPosts([]);
+					setErr(data);
+				} else {
+					setPosts(data);
+					setPosted(true);
+				}
+			} else {
+				setErr(data);
 			}
-		};
+		} catch (err) {
+			console.log(err);
+		}
+	}, [authTokens.access, setPosted, setPosts, setErr]);
 
+	useEffect(() => {
 		fetchHomePosts();
-	}, [authTokens.access]);
+	}, [fetchHomePosts]);
 
 	return (
 		<>
@@ -60,25 +62,38 @@ const HomePage = () => {
 					/>
 					<p>What are you thinking about?</p>
 				</button>
-				{open && <PostForm closeForm={setOpen} />}
+				{open && (
+					<PostForm
+						fetchHomePosts={fetchHomePosts}
+						closeForm={setOpen}
+					/>
+				)}
 
 				<div className={classes["posts-home-container"]}>
-					{posts.map((post) => (
-						<Post
-							key={post.id}
-							username={post.profile_username}
-							postId={post.id}
-							profilePic={post.profile_picture}
-							firstName={post.profile_first_name}
-							lastName={post.profile_last_name}
-							likesCount={post.likes_count}
-							commentsCount={post.comments_count}
-							createdDate={post.created_date}
-							postBody={post.body}
-							profileId={post.profile}
-							isLiked={post.is_liked_by_user}
-						/>
-					))}
+					{posted && posts.length ? (
+						posts.map((post) => (
+							<Post
+								key={post.id}
+								username={post.profile_username}
+								postId={post.id}
+								profilePic={post.profile_picture}
+								firstName={post.profile_first_name}
+								lastName={post.profile_last_name}
+								likesCount={post.likes_count}
+								commentsCount={post.comments_count}
+								createdDate={post.created_date}
+								postBody={post.body}
+								profileId={post.profile}
+								isLiked={post.is_liked_by_user}
+							/>
+						))
+					) : (
+						<h1 style={{ textAlign: "center" }}>
+							{posted
+								? "No one has posted yet"
+								: "You have to post to see others' minds"}
+						</h1>
+					)}
 				</div>
 			</Card>
 		</>

@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }) => {
 
 			let data = await response.json();
 			if (response.ok) {
+				console.log(data);
 				// Setting authentication data ( user from decoded token and passing tokens to localstorage )
 				setAuthTokens(data);
 				setUser(jwtDecode(data.access));
@@ -101,6 +102,7 @@ export const AuthProvider = ({ children }) => {
 				);
 				let data = await response.json();
 				if (response.ok) {
+					console.log(data);
 					setAuthTokens(data);
 					setUser(jwtDecode(data.access));
 					localStorage.setItem("authTokens", JSON.stringify(data));
@@ -112,12 +114,10 @@ export const AuthProvider = ({ children }) => {
 			}
 		};
 
-		let fourMins = 1000 * 60 * 4;
+		let fiveMins = 1000 * 60 * 5;
 		let interval = setInterval(() => {
-			if (authTokens) {
-				updateToken();
-			}
-		}, fourMins);
+			updateToken();
+		}, fiveMins);
 
 		return () => clearInterval(interval);
 	}, [authTokens]);

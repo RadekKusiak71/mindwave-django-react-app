@@ -43,6 +43,7 @@ const PostForm = (props) => {
 		e.preventDefault();
 		if (body.trim().length > 3) {
 			createPost();
+			window.location.reload();
 		} else {
 			setErr({ Body: "Body needs to be more than 3 characters lenght" });
 		}

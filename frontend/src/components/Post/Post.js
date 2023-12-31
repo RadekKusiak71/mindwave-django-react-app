@@ -7,6 +7,7 @@ import AuthContext from "../../context/AuthContext";
 
 const Post = (props) => {
 	const { authTokens } = useContext(AuthContext);
+
 	const [post, setPostData] = useState({
 		profilePic: props.profilePic,
 		firstName: props.firstName,
@@ -15,9 +16,11 @@ const Post = (props) => {
 		likesCount: props.likesCount,
 		commentsCount: props.commentsCount,
 	});
+
 	const [isLiked, setIsLiked] = useState(props.isLiked);
 
 	const likeButtonHandler = async () => {
+		// optimistic update if response !ok it will go back to prev state
 		setIsLiked(!isLiked);
 		try {
 			let response = await fetch(
@@ -37,6 +40,8 @@ const Post = (props) => {
 					...prevData,
 					likesCount: data.posts_likes,
 				}));
+			} else {
+				setIsLiked(!isLiked);
 			}
 		} catch (err) {
 			console.log(err);
