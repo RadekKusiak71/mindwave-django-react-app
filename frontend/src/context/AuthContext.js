@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
@@ -69,12 +69,12 @@ export const AuthProvider = ({ children }) => {
 		}
 	};
 
-	const logoutUser = () => {
+	const logoutUser = useCallback(() => {
 		localStorage.removeItem("authTokens");
 		setAuthTokens(null);
 		setUser(null);
 		navigate("/login");
-	};
+	}, [setAuthTokens, setUser, navigate]);
 
 	const authData = {
 		user: user,
@@ -108,6 +108,8 @@ export const AuthProvider = ({ children }) => {
 					localStorage.setItem("authTokens", JSON.stringify(data));
 				} else {
 					setAuthErr(data);
+					localStorage.removeItem("authTokens");
+					logoutUser();
 				}
 			} catch (err) {
 				console.log(err);
@@ -120,7 +122,7 @@ export const AuthProvider = ({ children }) => {
 		}, fiveMins);
 
 		return () => clearInterval(interval);
-	}, [authTokens]);
+	}, [authTokens, logoutUser]);
 
 	return (
 		<AuthContext.Provider value={authData}>{children}</AuthContext.Provider>

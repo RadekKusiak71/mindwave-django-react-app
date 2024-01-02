@@ -1,0 +1,34 @@
+.search-result{
+    width: 650px;
+    padding: 0 15px;
+    height: 50px;
+    border-radius: 20px;
+    border: 1px solid #393939;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.2s ease-in-out;
+}
+.search-result:hover{
+    border: 1px solid #FFFFFF;
+}
+.user-data{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #393939;
+    transition: 0.2s ease-in-out;
+}
+.user-data:hover{
+    color: #FFFFFF;
+}
+.user-image{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+}

@@ -91,7 +91,7 @@ const HomePage = () => {
 						<h1 style={{ textAlign: "center" }}>
 							{posted
 								? "No one has posted yet"
-								: "You have to post to see others' minds"}
+								: "You have to post to see others minds"}
 						</h1>
 					)}
 				</div>

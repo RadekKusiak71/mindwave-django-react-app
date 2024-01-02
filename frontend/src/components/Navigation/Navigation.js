@@ -24,21 +24,22 @@ const NavigationLink = (props) => {
 };
 
 const Navigation = () => {
-	const { logoutUser } = useContext(AuthContext);
+	const { logoutUser, user } = useContext(AuthContext);
+
 	return (
 		<header className={classes["header"]}>
 			<nav className={classes["navigation-menu"]}>
-				<NavigationLink
-					path="account"
-					icon={accountIcon}
-					iconAlt="Account"
-				/>
+				<NavigationLink path="" icon={homeIcon} iconAlt="Home" />
 				<NavigationLink
 					path="search"
 					icon={searchIcon}
 					iconAlt="Search"
 				/>
-				<NavigationLink path="" icon={homeIcon} iconAlt="Home" />
+				<NavigationLink
+					path={`account/${user.user_id}`}
+					icon={accountIcon}
+					iconAlt="Account"
+				/>
 				<NavigationLink
 					path="login"
 					icon={logoutIcon}

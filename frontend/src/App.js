@@ -7,6 +7,7 @@ import HeaderApplier from "./utils/HeaderApplier";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoutes from "./utils/PrivateRoutes";
+import SearchPage from "./pages/SearchPage/SearchPage";
 
 function App() {
 	return (
@@ -18,7 +19,11 @@ function App() {
 					<Route element={<PrivateRoutes />}>
 						<Route element={<HeaderApplier />}>
 							<Route path="/" element={<HomePage />} />
-							<Route path="/account" element={<ProfilePage />} />
+							<Route
+								path="/account/:userId"
+								element={<ProfilePage />}
+							/>
+							<Route path="/search" element={<SearchPage />} />
 						</Route>
 					</Route>
 				</Routes>
