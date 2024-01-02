@@ -13,6 +13,18 @@ class ProfileViewSet(viewsets.ViewSet):
         serializer_data = ProfileSerializer(queryset, many=True).data
         return Response(serializer_data, status=status.HTTP_200_OK)
     
+    # Method providing retrieving users by username
+    @action(detail=False, methods=['GET'], url_path='username/(?P<username>[^/.]+)')
+    def search_by_username(self,request,username=None):
+        queryset = Profile.objects.filter(user__username__contains=username)
+        serializer = ProfileSerializer(queryset,many=True)
+        try:
+            if queryset.exists():
+                return Response(serializer.data,status=status.HTTP_200_OK)
+            return Response({"detail":'No user were found'},status=status.HTTP_404_NOT_FOUND)
+        except:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def retrieve(self, request, pk=None):
         queryset = Profile.objects.all()
         profile = get_object_or_404(queryset, pk=pk)

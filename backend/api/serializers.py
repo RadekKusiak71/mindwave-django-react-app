@@ -8,6 +8,7 @@ from .models import Profile,Comment,Post,Like,FriendRequest
 
 class ProfileSerializer(serializers.ModelSerializer):
     posted_today = serializers.BooleanField(source='check_if_posted')
+    username = serializers.CharField(source="user.username")
     class Meta:
         model= Profile
         fields = '__all__'
