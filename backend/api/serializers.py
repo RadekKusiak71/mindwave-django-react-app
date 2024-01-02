@@ -9,6 +9,9 @@ from .models import Profile,Comment,Post,Like,FriendRequest
 class ProfileSerializer(serializers.ModelSerializer):
     posted_today = serializers.BooleanField(source='check_if_posted')
     username = serializers.CharField(source="user.username")
+    first_name = serializers.CharField(source="user.first_name")
+    last_name = serializers.CharField(source="user.last_name")
+    
     class Meta:
         model= Profile
         fields = '__all__'
@@ -90,9 +93,14 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
         token['user_id'] = user.id
         token['user_profile_picture'] = cls.get_profile_data(user)
+        token['profile_id'] = cls.get_profile_id(user)
 
         return token
 
     def get_profile_data(user):
         profile = Profile.objects.get(user=user)
         return str(profile.profile_picture)
+    
+    def get_profile_id(user):
+        profile = Profile.objects.get(user=user)
+        return profile.id
