@@ -1,11 +1,21 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+	useCallback,
+	useContext,
+	useLayoutEffect,
+	useState,
+} from "react";
+
 import classes from "./ProfileData.module.css";
 import { useParams } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
+import Card from "../../layout/Card";
+import accountIcon from "../../assets/icons/Account.svg";
+import FriendsButton from "./FriendsButton";
+import Requests from "./Requests";
 
 const ProfileData = () => {
 	const { userId } = useParams();
-	const { authTokens } = useContext(AuthContext);
+	const { authTokens, user } = useContext(AuthContext);
 	const [profile, setProfile] = useState(null);
 
 	const fetchProfileData = useCallback(async () => {
@@ -22,8 +32,8 @@ const ProfileData = () => {
 			);
 			let data = await response.json();
 			if (response.ok) {
-				setProfile(data);
 				console.log(data);
+				setProfile(data);
 			} else {
 				console.log(response);
 			}
@@ -32,14 +42,54 @@ const ProfileData = () => {
 		}
 	}, [setProfile, userId, authTokens.access]);
 
-	useEffect(() => {
+	// Method to check if its client profile or other user ( for dispalying requests or add button)
+	const checkIds = (userId) => {
+		if (user.user_id === Number(userId)) {
+			return <Requests />;
+		} else {
+			return (
+				<FriendsButton
+					profileId={profile.id}
+					friendsArr={profile.friends}
+				/>
+			);
+		}
+	};
+
+	useLayoutEffect(() => {
 		fetchProfileData();
 	}, [fetchProfileData]);
 
 	return (
-		<div>
-			<p>xd</p>
-		</div>
+		<Card>
+			{profile && (
+				<>
+					<div className={classes["profile-data"]}>
+						<div className={classes["upper-profile"]}>
+							<img
+								src={
+									profile.profile_picture
+										? `http://127.0.0.1:8000${profile.profile_picture}`
+										: accountIcon
+								}
+								alt={`${profile.username}`}
+								className={classes["profile-picture"]}
+							/>
+							<p className={classes["profile-name"]}>
+								{profile.first_name} {profile.last_name}
+								<span className={classes["profile-username"]}>
+									@{profile.username}
+								</span>
+								<span className={classes["profile-bio"]}>
+									{profile.bio}
+								</span>
+							</p>
+						</div>
+					</div>
+					{checkIds(userId)}
+				</>
+			)}
+		</Card>
 	);
 };
 

@@ -1,0 +1,30 @@
+.profile-data{
+    border: 1px solid #393E46;
+    border-radius: 10px;
+    padding:10px;
+}
+.upper-profile{
+    display: flex;
+    justify-content: flex-start;
+    gap: 30px;
+}
+.profile-name{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding-top: 5px;
+    font-size: 30px;
+}
+.profile-username{
+    font-size: 15px;
+}
+
+.profile-picture{
+    width: 150px;
+    height: 150px;
+    border-radius: 1000px;
+}
+.profile-bio{
+    padding-top: 10px;
+    font-size: 18px;
+}
