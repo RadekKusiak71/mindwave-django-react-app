@@ -8,25 +8,31 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import SearchPage from "./pages/SearchPage/SearchPage";
+import { FriendsProvider } from "./context/FriendsContext";
 
 function App() {
 	return (
 		<Router>
 			<AuthProvider>
-				<Routes>
-					<Route path="/login" element={<LoginPage />} />
-					<Route path="/register" element={<RegisterPage />} />
-					<Route element={<PrivateRoutes />}>
-						<Route element={<HeaderApplier />}>
-							<Route path="/" element={<HomePage />} />
-							<Route
-								path="/account/:userId"
-								element={<ProfilePage />}
-							/>
-							<Route path="/search" element={<SearchPage />} />
+				<FriendsProvider>
+					<Routes>
+						<Route path="/login" element={<LoginPage />} />
+						<Route path="/register" element={<RegisterPage />} />
+						<Route element={<PrivateRoutes />}>
+							<Route element={<HeaderApplier />}>
+								<Route path="/" element={<HomePage />} />
+								<Route
+									path="/account/:userId"
+									element={<ProfilePage />}
+								/>
+								<Route
+									path="/search"
+									element={<SearchPage />}
+								/>
+							</Route>
 						</Route>
-					</Route>
-				</Routes>
+					</Routes>
+				</FriendsProvider>
 			</AuthProvider>
 		</Router>
 	);

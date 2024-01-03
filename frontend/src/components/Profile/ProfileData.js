@@ -4,7 +4,7 @@ import React, {
 	useLayoutEffect,
 	useState,
 } from "react";
-
+import Notification from "../Notification/Notification";
 import classes from "./ProfileData.module.css";
 import { useParams } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
@@ -12,10 +12,13 @@ import Card from "../../layout/Card";
 import accountIcon from "../../assets/icons/Account.svg";
 import FriendsButton from "./FriendsButton";
 import Requests from "./Requests";
+import FriendsContext from "../../context/FriendsContext";
 
 const ProfileData = () => {
 	const { userId } = useParams();
 	const { authTokens, user } = useContext(AuthContext);
+	const { message, clearMessage } = useContext(FriendsContext);
+
 	const [profile, setProfile] = useState(null);
 
 	const fetchProfileData = useCallback(async () => {
@@ -62,6 +65,9 @@ const ProfileData = () => {
 
 	return (
 		<Card>
+			{message && (
+				<Notification errors={message} onClick={() => clearMessage()} />
+			)}
 			{profile && (
 				<>
 					<div className={classes["profile-data"]}>
