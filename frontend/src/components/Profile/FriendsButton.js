@@ -34,9 +34,6 @@ const FriendsButton = (props) => {
 				if (data.request_data) {
 					setRequestData(data.request_data);
 				}
-				console.log(data);
-			} else {
-				console.log(data);
 			}
 		} catch (err) {
 			console.log(err);

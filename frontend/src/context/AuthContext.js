@@ -31,16 +31,12 @@ export const AuthProvider = ({ children }) => {
 
 			let data = await response.json();
 			if (response.ok) {
-				console.log(data);
 				// Setting authentication data ( user from decoded token and passing tokens to localstorage )
 				setAuthTokens(data);
 				setUser(jwtDecode(data.access));
 				localStorage.setItem("authTokens", JSON.stringify(data));
 				navigate("/");
 			} else {
-				if (data.detail) {
-					console.log(data);
-				}
 				setAuthErr(data);
 			}
 		} catch (err) {
@@ -102,7 +98,6 @@ export const AuthProvider = ({ children }) => {
 				);
 				let data = await response.json();
 				if (response.ok) {
-					console.log(data);
 					setAuthTokens(data);
 					setUser(jwtDecode(data.access));
 					localStorage.setItem("authTokens", JSON.stringify(data));

@@ -35,7 +35,6 @@ const ProfileData = () => {
 			);
 			let data = await response.json();
 			if (response.ok) {
-				console.log(data);
 				setProfile(data);
 			} else {
 				console.log(response);

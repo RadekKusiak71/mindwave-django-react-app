@@ -59,7 +59,6 @@ export const FriendsProvider = ({ children }) => {
 		let data = await response.json();
 
 		if (response.ok) {
-			console.log(data);
 			window.location.reload();
 		} else {
 			setMessage(data);
