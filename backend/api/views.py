@@ -24,59 +24,75 @@ class FriendsRequestsViewSet(viewsets.ViewSet):
         except:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
-    def create(self,request,pk=None):
+    def create(self,request):
         serializer = FriendRequestSerializer(data=request.data)
         try:
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response({"detail":"Request sent properlly"},status=status.HTTP_201_CREATED)
         except:
-            return Response(serializer.error,status=status.HTTP_200_OK)
+            return Response(serializer.error,status=status.HTTP_400_BAD_REQUEST)
     
     # Method to look if friend request already exists ( accept a profiles id)
     @action(detail=False,methods=['POST'],url_path='check')
     def check_if_exists(self,request):
         data = request.data
         try:
-
-            # Looking for both cases
-            exists_value = FriendRequest.objects.filter(sender=data['sender'],receiver=data['receiver']).exists()
+            # Checking if other user didn't already send a request
+            request = FriendRequest.objects.filter(sender=data['receiver'],receiver=data['sender'])
+            if request.exists():
+                serialized = FriendRequestSerializer(request.first(),many=False)
+                return Response({'exists':True,'request_data':serialized.data},status=status.HTTP_200_OK)
             
-            if exists_value:
-                return Response({'exists':True},status=status.HTTP_200_OK)
-            else:
-                return Response({'exists':False},status=status.HTTP_200_OK)
+            # Looking for your request
+            request2 = FriendRequest.objects.filter(sender=data['sender'],receiver=data['receiver'])
+            if request2.exists():
+                 serialized=FriendRequestSerializer(request2.first(),many=False)
+                 return Response({'exists':True,'request_data':serialized.data},status=status.HTTP_200_OK)
+            return Response({'exists':False},status=status.HTTP_404_NOT_FOUND)
+            
         except Exception as e:
             return Response({'detail':str(e)},status=status.HTTP_400_BAD_REQUEST)
-
-
-    def update(self, request, pk=None):
-            request = get_object_or_404(FriendRequest, pk=pk)
-            serializer = FriendRequestSerializer(request, data=request.data)
-            try:
-                serializer.is_valid(raise_exception=True)
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            except Exception as e:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def partial_update(self, request, pk=None):
-        request = get_object_or_404(FriendRequest, pk=pk)
-        serializer = FriendRequestSerializer(request, data=request.data, partial=True)
+        
+    # Method provide accepting friends request
+    @action(detail=False,methods=['POST'],url_path='accept')
+    def accept_friend_request(self,request):
+        data = request.data
         try:
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def destroy(self, request, pk=None):
-        try:
-            request = get_object_or_404(FriendRequest, pk=pk)
+            request = FriendRequest.objects.get(id=data['request_id'])
+            receiver = Profile.objects.get(id=request.receiver.id)
+            sender = Profile.objects.get(id=request.sender.id)
+            sender.friends.add(receiver)
+            sender.save()
             request.delete()
-            return Response({"detail": "Request deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'detail':'Friend request accepted'},status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({"detail": f"Error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'detail': str(e)},status=status.HTTP_400_BAD_REQUEST)
+        
+
+    def destroy(self,request,pk=None):
+        try:
+            request = FriendRequest.objects.get(id=pk)
+            request.delete()
+            return Response({'detail':'Request deleted properly'},status=status.HTTP_200_OK)
+        except:
+            return Response({'detail':'Request not found'},status=status.HTTP_404_NOT_FOUND)
+
+
+    # Method provide removing friends funcionality
+    @action(detail=False,methods=['DELETE'],url_path='remove')
+    def remove_friend(self,request):
+        data = request.data
+        try:
+            receiver = Profile.objects.get(id=data['receiver_id'])
+            sender = Profile.objects.get(id=data['sender_id'])
+
+            sender.friends.remove(receiver)
+            sender.save()
+            return Response({'detail':'Friend removed successfully'},status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'detail': str(e)},status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class ProfileViewSet(viewsets.ViewSet):
@@ -84,6 +100,7 @@ class ProfileViewSet(viewsets.ViewSet):
         queryset = Profile.objects.all()
         serializer_data = ProfileSerializer(queryset, many=True).data
         return Response(serializer_data, status=status.HTTP_200_OK)
+
 
     # Method providing retrieving users by username
     @action(detail=False, methods=['GET'], url_path='username/(?P<username>[^/.]+)')
