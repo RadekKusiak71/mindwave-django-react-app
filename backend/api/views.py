@@ -199,8 +199,9 @@ class PostViewSet(viewsets.ViewSet):
     # Method providing liking and unliking post
     @action(detail=True,methods=['POST'],url_path='like')
     def post_reaction(self,request,pk=None):
+        user = request.user
         post = Post.objects.get(id=pk)
-        profile = Profile.objects.get(user__id=1)
+        profile = Profile.objects.get(user__id=user.id)
         post_data = {
             "post":post.id,
             "profile":profile.id
