@@ -13,8 +13,8 @@
 1. JWTOKEN Authorization
 2. Posting, Reacting , Commenting
 3. Friends Requesting
-4. Profile Editing
-5. More will be added in a future
+4. Profile Editing -> will be added in a while
+5. More will be added in a features
 
 # Instalation
 ```
