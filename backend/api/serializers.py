@@ -47,6 +47,10 @@ class LikeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class FriendRequestSerializer(serializers.ModelSerializer):
+    sender_username = serializers.CharField(source="sender.user.username",required=False)
+    sender_profile_picture = serializers.CharField(source="sender.profile_picture",required=False)
+    sender_user_id = serializers.IntegerField(source="sender.user.id",required=False)
+
     class Meta:
         model= FriendRequest
         fields = '__all__'

@@ -11,6 +11,7 @@ const FriendsButton = (props) => {
 	const [requestStatus, setRequestStatus] = useState(false);
 	const [requestData, setRequestData] = useState(null);
 
+	// Method for checking if user is already requested
 	const checkIfRequested = useCallback(async () => {
 		try {
 			let response = await fetch(
@@ -63,8 +64,15 @@ const FriendsButton = (props) => {
 						cancelRequest(requestData.id)
 					);
 				} else {
-					return ButtonDisplayer(false, "Accept Request", () =>
-						acceptRequest(requestData.id)
+					return (
+						<>
+							{ButtonDisplayer(false, "Accept Request", () =>
+								acceptRequest(requestData.id)
+							)}
+							{ButtonDisplayer(false, "Reject Request", () =>
+								cancelRequest(requestData.id)
+							)}
+						</>
 					);
 				}
 			} else {

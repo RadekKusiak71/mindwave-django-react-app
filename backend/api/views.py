@@ -102,6 +102,19 @@ class ProfileViewSet(viewsets.ViewSet):
         return Response(serializer_data, status=status.HTTP_200_OK)
 
 
+    # Method providing fetching a user friend requests that someone send him over
+    @action(detail=False,methods=['GET'],url_path=('(?P<username>[^/.]+)/requests'))
+    def requests_list(self,request,username=None):
+        try:
+            profile = Profile.objects.get(user__username=username)
+            queryset = FriendRequest.objects.filter(receiver=profile)
+            if(queryset):
+                serializer = FriendRequestSerializer(queryset,many=True)
+                return Response(serializer.data,status=status.HTTP_200_OK)
+            return Response({"detail":"No friends requests found"},status=status.HTTP_404_NOT_FOUND)
+        except:
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
     # Method providing retrieving users by username
     @action(detail=False, methods=['GET'], url_path='username/(?P<username>[^/.]+)')
     def search_by_username(self,request,username=None):

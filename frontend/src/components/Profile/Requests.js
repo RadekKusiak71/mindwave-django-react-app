@@ -1,18 +1,26 @@
-import React from "react";
-import classes from "./Requests.module.css";
+import React, { useState } from "react";
+import RequestsDisplay from "./RequestsDisplay";
+import DisplayButton from "./DisplayButton";
 
 const Requests = () => {
+	const [open, setOpen] = useState(false);
+
+	const openYourRequestsHandler = () => {
+		setOpen(!open);
+	};
+
 	return (
 		<div>
-			<button
-				type="button"
-				onClick={() => {
-					console.log("open requests");
-				}}
-				className={classes["profile-button"]}
-			>
-				Friend Requests
-			</button>
+			<DisplayButton
+				disabled={false}
+				text={"Friend Requests"}
+				onClick={() => openYourRequestsHandler()}
+			/>
+			{open && (
+				<RequestsDisplay
+					openYourRequestsHandler={openYourRequestsHandler}
+				/>
+			)}
 		</div>
 	);
 };

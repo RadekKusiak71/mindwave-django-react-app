@@ -1,0 +1,50 @@
+.requests-backdrop{
+    position:absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 150px;
+    background-color: rgba(0, 0, 0, 0.889);
+}
+.request-result{
+    width: 700px;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #393E46;
+    border-radius: 10px;
+}
+.result-profile-data{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+.request-result-img{
+    border-radius: 1000px;
+}
+.result-profile-data > a {
+    text-decoration: none;
+    color: #FFFFFF;
+}
+.request-buttons{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.request-func-button{
+    all: unset;
+    cursor: pointer;
+    width: 100px;
+    height: 20px;
+    border: 1px solid #393E46;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 12px;
+}
