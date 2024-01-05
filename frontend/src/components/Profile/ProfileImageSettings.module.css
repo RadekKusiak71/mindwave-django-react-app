@@ -1,0 +1,24 @@
+.profile-image-settings-backdrop{
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #000000cf;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.file-input-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 600px;
+    height:350px;
+    background-color: #393939;
+    border-radius: 20px;
+}
+
+input[type="file"] {
+    display: none;
+}

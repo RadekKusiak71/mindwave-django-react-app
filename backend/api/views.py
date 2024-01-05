@@ -204,7 +204,8 @@ class PostViewSet(viewsets.ViewSet):
         queryset = Post.objects.all()
         serializer_data = PostSerializer(queryset, many=True).data
         return Response(serializer_data, status=status.HTTP_200_OK)
-   
+
+
     # Method providing fetching today posts only for users that are connected
     @action(detail=False, methods=['GET'], url_path='daily')
     def get_daily_posts(self, request):

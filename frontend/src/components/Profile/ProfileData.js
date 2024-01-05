@@ -13,12 +13,13 @@ import accountIcon from "../../assets/icons/Account.svg";
 import FriendsButton from "./FriendsButton";
 import Requests from "./Requests";
 import FriendsContext from "../../context/FriendsContext";
+import ProfileImageSettings from "./ProfileImageSettings";
 
 const ProfileData = () => {
 	const { userId } = useParams();
 	const { authTokens, user } = useContext(AuthContext);
 	const { message, clearMessage } = useContext(FriendsContext);
-
+	const [imgSettings, openImgSettings] = useState(false);
 	const [profile, setProfile] = useState(null);
 
 	const fetchProfileData = useCallback(async () => {
@@ -58,12 +59,22 @@ const ProfileData = () => {
 		}
 	};
 
+	// Preventing other user to open all settings
+	const handleChangeImageOpen = () => {
+		if (user.user_id === profile.id) {
+			openImgSettings(!imgSettings);
+		}
+	};
+
 	useLayoutEffect(() => {
 		fetchProfileData();
 	}, [fetchProfileData]);
 
 	return (
 		<Card>
+			{imgSettings && (
+				<ProfileImageSettings handleChangeImageOpen={handleChangeImageOpen} />
+			)}
 			{message && (
 				<Notification errors={message} onClick={() => clearMessage()} />
 			)}
@@ -79,6 +90,7 @@ const ProfileData = () => {
 								}
 								alt={`${profile.username}`}
 								className={classes["profile-picture"]}
+								onClick={() => handleChangeImageOpen()}
 							/>
 							<p className={classes["profile-name"]}>
 								{profile.first_name} {profile.last_name}

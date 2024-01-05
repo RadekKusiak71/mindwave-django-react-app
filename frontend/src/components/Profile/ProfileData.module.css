@@ -23,6 +23,10 @@
     width: 150px;
     height: 150px;
     border-radius: 1000px;
+    cursor: pointer;
+}
+.profile-picture:hover{
+    scale: 0.9;
 }
 .profile-bio{
     padding-top: 10px;
