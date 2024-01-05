@@ -9,6 +9,7 @@ import { AuthProvider } from "./context/AuthContext";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import { FriendsProvider } from "./context/FriendsContext";
+import PostPage from "./pages/PostPage/PostPage";
 
 function App() {
 	return (
@@ -28,6 +29,10 @@ function App() {
 								<Route
 									path="/search"
 									element={<SearchPage />}
+								/>
+								<Route
+									path="/post/:postId"
+									element={<PostPage />}
 								/>
 							</Route>
 						</Route>

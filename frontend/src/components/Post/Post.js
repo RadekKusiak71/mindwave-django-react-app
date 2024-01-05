@@ -4,6 +4,8 @@ import chatIcon from "../../assets/icons/Chatbubble.svg";
 import likeIcon from "../../assets/icons/Scrollup.svg";
 import likedIcon from "../../assets/icons/ScrollupLike.svg";
 import AuthContext from "../../context/AuthContext";
+import { Link } from "react-router-dom";
+import accountIcon from "../../assets/icons/Account.svg";
 
 const Post = (props) => {
 	const { authTokens } = useContext(AuthContext);
@@ -53,16 +55,23 @@ const Post = (props) => {
 			<div className={classes["post-form-data"]}>
 				<img
 					className={classes["profile-image-home"]}
-					src={`http://127.0.0.1:8000/media/${post.profilePic}`}
+					src={
+						post.profilePic
+							? `http://127.0.0.1:8000/media/${post.profilePic}`
+							: accountIcon
+					}
 					alt="profile"
 				/>
-				<p className={classes["profile-data"]}>
+				<Link
+					to={`/account/${props.profileId}`}
+					className={classes["profile-data"]}
+				>
 					{post.firstName} {post.lastName}
 					<br />
 					<span className={classes["profile-username"]}>
 						@{post.username}
 					</span>
-				</p>
+				</Link>
 			</div>
 			<div className={classes["post-body"]}>{props.postBody}</div>
 			<div className={classes["post-reactions"]}>
@@ -78,9 +87,13 @@ const Post = (props) => {
 					)}
 					{post.likesCount}
 				</button>
-				<button type="button" className={classes["post-react-button"]}>
+				<Link
+					to={`/post/${props.postId}`}
+					type="button"
+					className={classes["post-react-button"]}
+				>
 					<img src={chatIcon} alt="comment" /> {post.commentsCount}
-				</button>
+				</Link>
 			</div>
 		</div>
 	);

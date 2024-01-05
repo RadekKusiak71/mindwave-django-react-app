@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-from .views import ProfileViewSet,PostViewSet,FriendsRequestsViewSet
+from .views import ProfileViewSet,PostViewSet,FriendsRequestsViewSet,CommentsViewSet
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -13,6 +13,7 @@ router = DefaultRouter()
 router.register(r'profiles',ProfileViewSet,basename='profile')
 router.register(r'posts',PostViewSet,basename='post')
 router.register(r'friends',FriendsRequestsViewSet,basename='friends')
+router.register(r'comments',CommentsViewSet,basename='comment')
 
 urlpatterns = [
     # jwtoken views for obtaining token and refresing

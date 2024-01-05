@@ -2,12 +2,39 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
-from .models import Profile,Post,Like,FriendRequest
-from .serializers import ProfileSerializer, RegisterSerializer,PostSerializer,LikeSerializer,FriendRequestSerializer
+from .models import Profile,Post,Like,FriendRequest,Comment
+from .serializers import ProfileSerializer, RegisterSerializer,PostSerializer,LikeSerializer,FriendRequestSerializer,CommentSerializer
 from datetime import datetime
 from rest_framework.decorators import action
 
 
+
+
+class CommentsViewSet(viewsets.ViewSet):
+    def list(self,request):
+        queryset = Comment.objects.all()
+        serializer = CommentSerializer(queryset,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+    def retrieve(self,request,pk=None):
+        try:
+            comment = Comment.objects.get(id=pk)
+            serializer = CommentSerializer(comment,many=False)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        except Comment.DoesNotExist:
+            return Response({'detail':'Comment not found'},status=status.HTTP_404_NOT_FOUND)
+        except:
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+    def create(self,request):
+        serializer = CommentSerializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response({"detail":"Comment created"},status=status.HTTP_201_CREATED)
+        except:
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        
 class FriendsRequestsViewSet(viewsets.ViewSet):
     def list(self,request):
         queryset = FriendRequest.objects.all()
@@ -194,7 +221,13 @@ class PostViewSet(viewsets.ViewSet):
 
         return Response(serializer_data, status=status.HTTP_200_OK)
     
-
+    @action(detail=False,methods=['GET'],url_path='(?P<post_id>[^/.]+)/comments')
+    def post_comments(self,request,post_id=None):
+        post = Post.objects.get(id=post_id)
+        comments = Comment.objects.filter(post=post)
+        serializer = CommentSerializer(comments,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
     
     # Method providing liking and unliking post
     @action(detail=True,methods=['POST'],url_path='like')
@@ -235,7 +268,8 @@ class PostViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         queryset = Post.objects.all()
         post = get_object_or_404(queryset, pk=pk)
-        serializer_data = PostSerializer(post).data
+        serializer_context = {'user': request.user}
+        serializer_data = PostSerializer(post,context=serializer_context).data
         return Response(serializer_data, status=status.HTTP_200_OK)
 
     def update(self, request, pk=None):

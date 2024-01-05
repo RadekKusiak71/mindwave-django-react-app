@@ -12,7 +12,6 @@ const HomePage = () => {
 	const [posted, setPosted] = useState(false);
 	const [posts, setPosts] = useState([]);
 	const { user, authTokens } = useContext(AuthContext);
-
 	const fetchHomePosts = useCallback(async () => {
 		try {
 			let response = await fetch(

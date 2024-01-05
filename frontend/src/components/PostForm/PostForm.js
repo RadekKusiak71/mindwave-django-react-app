@@ -3,6 +3,7 @@ import classes from "./PostForm.module.css";
 import closeIcon from "../../assets/icons/Close.svg";
 import Notification from "../Notification/Notification";
 import AuthConext from "../../context/AuthContext";
+import accountIcon from "../../assets/icons/Account.svg";
 
 const PostForm = (props) => {
 	const [body, setBody] = useState("");
@@ -22,8 +23,8 @@ const PostForm = (props) => {
 			let response = await fetch("http://127.0.0.1:8000/api/posts/", {
 				method: "POST",
 				headers: {
-					"Content-Type": "application/json",
 					Authorization: `Bearer ${authTokens.access}`,
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({ body: body }),
 			});
@@ -31,6 +32,7 @@ const PostForm = (props) => {
 			let data = await response.json();
 			if (response.ok) {
 				handleFormClose();
+				window.location.reload();
 			} else {
 				setErr(data);
 			}
@@ -43,7 +45,6 @@ const PostForm = (props) => {
 		e.preventDefault();
 		if (body.trim().length > 3) {
 			createPost();
-			window.location.reload();
 		} else {
 			setErr({ Body: "Body needs to be more than 3 characters lenght" });
 		}
@@ -65,15 +66,19 @@ const PostForm = (props) => {
 						<div className={classes["post-form-data"]}>
 							<img
 								className={classes["profile-image-home"]}
-								src={`http://127.0.0.1:8000/media/${user.user_profile_picture}`}
+								src={
+									user.user_profile_picture
+										? `http://127.0.0.1:8000/media/${user.user_profile_picture}`
+										: accountIcon
+								}
 								alt="profile"
 							/>
 							<p className={classes["profile-data"]}>
-								Radoslaw Kusiak
+								{user.username}
 								<br />
-								<span className={classes["profile-username"]}>
-									@admin
-								</span>
+								<span
+									className={classes["profile-username"]}
+								></span>
 							</p>
 						</div>
 						<button

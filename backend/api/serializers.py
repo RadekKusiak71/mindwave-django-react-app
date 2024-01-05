@@ -17,6 +17,11 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class CommentSerializer(serializers.ModelSerializer):
+    profile_picture = serializers.CharField(source="profile.profile_picture",required=False)
+    profile_username = serializers.CharField(source="profile.user.username",required=False)
+    profile_first_name = serializers.CharField(source="profile.user.first_name",required=False)
+    profile_last_name = serializers.CharField(source="profile.user.last_name",required=False)
+    
     class Meta:
         model= Comment
         fields = '__all__'
