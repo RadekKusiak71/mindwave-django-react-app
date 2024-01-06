@@ -18,6 +18,7 @@ const ProfileImageSettings = (props) => {
 			setFile(e.dataTransfer.files[0]);
 		}
 	};
+
 	const handleDragOver = (e) => {
 		e.preventDefault();
 		e.stopPropagation();
@@ -26,20 +27,21 @@ const ProfileImageSettings = (props) => {
 	const handleProfilePictureChange = async (e) => {
 		e.preventDefault();
 		try {
+			const formData = new FormData()
+			formData.append('profile_picture', file)
 			let response = await fetch(
 				`http://127.0.0.1:8000/api/profiles/${user.profile_id}/`,
 				{
-					method: "OPTIONS",
+					method: "PATCH",
 					headers: {
 						Authorization: `Bearer ${authTokens.access}`,
-						"Content-Type": "application/json",
 					},
-					body: JSON.stringify({ profile_picture: file }),
+					body: formData
 				}
 			);
 			let data = await response.json();
 			if (response.ok) {
-				console.log(data);
+				user.user_profile_picture = data.profile_picture
 			} else {
 				console.log(data);
 			}
@@ -56,6 +58,9 @@ const ProfileImageSettings = (props) => {
 			<form
 				onSubmit={handleProfilePictureChange}
 				encType="multipart/form-data"
+				onClick={(e) => {
+					e.stopPropagation();
+				}}
 			>
 				<div
 					onClick={(e) => {
