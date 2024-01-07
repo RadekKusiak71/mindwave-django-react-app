@@ -78,7 +78,9 @@ const ProfileImageSettings = (props) => {
 						)}
 					</label>
 				</div>
-				<button type="submit">Change profile image</button>
+				<button className={classes["form-button"]} type="submit">
+					Change profile image
+				</button>
 			</form>
 		</div>
 	);
