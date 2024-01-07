@@ -11,7 +11,9 @@ const HomePage = () => {
 	const [err, setErr] = useState(null);
 	const [posted, setPosted] = useState(false);
 	const [posts, setPosts] = useState([]);
-	const { user, authTokens } = useContext(AuthContext);
+	const { user, authTokens, userData, fetchUserDataLogin } =
+		useContext(AuthContext);
+
 	const fetchHomePosts = useCallback(async () => {
 		try {
 			let response = await fetch(
@@ -43,6 +45,10 @@ const HomePage = () => {
 
 	useEffect(() => {
 		fetchHomePosts();
+		if (authTokens) {
+			fetchUserDataLogin(user.user_id, authTokens.access);
+			console.log(userData);
+		}
 	}, [fetchHomePosts]);
 
 	return (
@@ -56,7 +62,11 @@ const HomePage = () => {
 				>
 					<img
 						className={classes["profile-image-home"]}
-						src={`http://127.0.0.1:8000/media/${user.user_profile_picture}`}
+						src={
+							userData.profile_picture
+								? `http://127.0.0.1:8000/${userData.profile_picture}/`
+								: "xd"
+						}
 						alt="profile"
 					/>
 					<p>What are you thinking about?</p>

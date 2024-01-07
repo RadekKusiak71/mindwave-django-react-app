@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
 	);
 	const [authErr, setAuthErr] = useState();
 	const navigate = useNavigate();
+	const [userData, setUserData] = useState([]);
 
 	const loginUser = async (formData) => {
 		try {
@@ -33,14 +34,35 @@ export const AuthProvider = ({ children }) => {
 			if (response.ok) {
 				// Setting authentication data ( user from decoded token and passing tokens to localstorage )
 				setAuthTokens(data);
-				setUser(jwtDecode(data.access));
 				localStorage.setItem("authTokens", JSON.stringify(data));
+				let userProfileData = jwtDecode(data.access);
+				setUser(userProfileData);
 				navigate("/");
 			} else {
 				setAuthErr(data);
 			}
 		} catch (err) {
 			console.log(err);
+		}
+	};
+
+	const fetchUserDataLogin = async (id, access) => {
+		let response = await fetch(
+			`http://127.0.0.1:8000/api/profiles/${id}/`,
+			{
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${access}`,
+					"Content-Type": "application/json",
+				},
+			}
+		);
+		let data = await response.json();
+		console.log(data);
+		if (response.ok) {
+			setUserData(data);
+		} else {
+			logoutUser();
 		}
 	};
 
@@ -80,6 +102,8 @@ export const AuthProvider = ({ children }) => {
 		loginUser: loginUser,
 		registerUser: registerUser,
 		logoutUser: logoutUser,
+		userData: userData,
+		fetchUserDataLogin: fetchUserDataLogin,
 	};
 
 	useEffect(() => {

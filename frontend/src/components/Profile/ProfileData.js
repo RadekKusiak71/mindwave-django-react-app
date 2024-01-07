@@ -73,7 +73,9 @@ const ProfileData = () => {
 	return (
 		<Card>
 			{imgSettings && (
-				<ProfileImageSettings handleChangeImageOpen={handleChangeImageOpen} />
+				<ProfileImageSettings
+					handleChangeImageOpen={handleChangeImageOpen}
+				/>
 			)}
 			{message && (
 				<Notification errors={message} onClick={() => clearMessage()} />

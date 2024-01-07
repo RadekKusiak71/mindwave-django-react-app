@@ -8,7 +8,7 @@ import accountIcon from "../../assets/icons/Account.svg";
 const PostForm = (props) => {
 	const [body, setBody] = useState("");
 	const [err, setErr] = useState(null);
-	const { authTokens, user } = useContext(AuthConext);
+	const { authTokens, user, userData } = useContext(AuthConext);
 
 	const handleFormClose = () => {
 		props.closeForm(false);
@@ -67,8 +67,8 @@ const PostForm = (props) => {
 							<img
 								className={classes["profile-image-home"]}
 								src={
-									user.user_profile_picture
-										? `http://127.0.0.1:8000/media/${user.user_profile_picture}`
+									userData.profile_picture
+										? `http://127.0.0.1:8000/${userData.profile_picture}`
 										: accountIcon
 								}
 								alt="profile"

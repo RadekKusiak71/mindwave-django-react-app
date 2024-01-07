@@ -4,8 +4,7 @@ import AuthContext from "../../context/AuthContext";
 
 const ProfileImageSettings = (props) => {
 	const [file, setFile] = useState(null);
-	const { user, authTokens } = useContext(AuthContext);
-
+	const { user, authTokens, fetchUserDataLogin } = useContext(AuthContext);
 	const handleFileChange = (e) => {
 		const selectedFile = e.target.files[0];
 		setFile(selectedFile);
@@ -27,8 +26,8 @@ const ProfileImageSettings = (props) => {
 	const handleProfilePictureChange = async (e) => {
 		e.preventDefault();
 		try {
-			const formData = new FormData()
-			formData.append('profile_picture', file)
+			const formData = new FormData();
+			formData.append("profile_picture", file);
 			let response = await fetch(
 				`http://127.0.0.1:8000/api/profiles/${user.profile_id}/`,
 				{
@@ -36,12 +35,12 @@ const ProfileImageSettings = (props) => {
 					headers: {
 						Authorization: `Bearer ${authTokens.access}`,
 					},
-					body: formData
+					body: formData,
 				}
 			);
 			let data = await response.json();
 			if (response.ok) {
-				user.user_profile_picture = data.profile_picture
+				window.location.reload();
 			} else {
 				console.log(data);
 			}
