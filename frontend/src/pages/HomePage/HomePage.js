@@ -45,11 +45,10 @@ const HomePage = () => {
 
 	useEffect(() => {
 		fetchHomePosts();
-		if (authTokens) {
+		if (authTokens.access) {
 			fetchUserDataLogin(user.user_id, authTokens.access);
-			console.log(userData);
 		}
-	}, [fetchHomePosts]);
+	}, [fetchHomePosts, fetchUserDataLogin, user.user_id, authTokens.access]);
 
 	return (
 		<>

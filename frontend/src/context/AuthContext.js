@@ -46,26 +46,6 @@ export const AuthProvider = ({ children }) => {
 		}
 	};
 
-	const fetchUserDataLogin = async (id, access) => {
-		let response = await fetch(
-			`http://127.0.0.1:8000/api/profiles/${id}/`,
-			{
-				method: "GET",
-				headers: {
-					Authorization: `Bearer ${access}`,
-					"Content-Type": "application/json",
-				},
-			}
-		);
-		let data = await response.json();
-		console.log(data);
-		if (response.ok) {
-			setUserData(data);
-		} else {
-			logoutUser();
-		}
-	};
-
 	const registerUser = async (formData) => {
 		try {
 			let response = await fetch("http://127.0.0.1:8000/api/profiles/", {
@@ -93,6 +73,32 @@ export const AuthProvider = ({ children }) => {
 		setUser(null);
 		navigate("/login");
 	}, [setAuthTokens, setUser, navigate]);
+
+	const fetchUserDataLogin = useCallback(
+		async (id, access) => {
+			try {
+				let response = await fetch(
+					`http://127.0.0.1:8000/api/profiles/${id}/`,
+					{
+						method: "GET",
+						headers: {
+							Authorization: `Bearer ${access}`,
+							"Content-Type": "application/json",
+						},
+					}
+				);
+				let data = await response.json();
+				if (response.ok) {
+					setUserData(data);
+				} else {
+					logoutUser();
+				}
+			} catch (err) {
+				console.log(err);
+			}
+		},
+		[setUserData, logoutUser]
+	);
 
 	const authData = {
 		user: user,
