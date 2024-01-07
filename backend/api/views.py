@@ -182,6 +182,7 @@ class ProfileViewSet(viewsets.ViewSet):
 
     def partial_update(self, request, pk=None):
         profile = get_object_or_404(Profile, pk=pk)
+        print(request.data)
         serializer = ProfileSerializer(profile, data=request.data, partial=True)
         try:
             serializer.is_valid(raise_exception=True)
