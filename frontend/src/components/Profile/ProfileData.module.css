@@ -32,3 +32,19 @@
     padding-top: 10px;
     font-size: 18px;
 }
+.bio-button{
+    all: unset;
+    cursor: pointer;
+    height: 20px;
+    border: 1px solid #393E46;
+    text-align: center;
+    border-radius: 5px;
+    transition: 0.3s ease-in-out;
+    font-size: 15px;
+    margin: 10px;
+}
+
+.bio-button:hover{
+   color: #FFFFFF;
+   border: 1px solid #FFFFFF;
+}

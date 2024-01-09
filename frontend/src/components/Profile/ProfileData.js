@@ -14,6 +14,7 @@ import FriendsButton from "./FriendsButton";
 import Requests from "./Requests";
 import FriendsContext from "../../context/FriendsContext";
 import ProfileImageSettings from "./ProfileImageSettings";
+import Bio from "./Bio";
 
 const ProfileData = () => {
 	const { userId } = useParams();
@@ -21,6 +22,7 @@ const ProfileData = () => {
 	const { message, clearMessage } = useContext(FriendsContext);
 	const [imgSettings, openImgSettings] = useState(false);
 	const [profile, setProfile] = useState(null);
+	const [open, setOpen] = useState(false);
 
 	const fetchProfileData = useCallback(async () => {
 		try {
@@ -66,6 +68,10 @@ const ProfileData = () => {
 		}
 	};
 
+	const handleBioChangeOpen = () => {
+		setOpen(!open);
+	};
+
 	useLayoutEffect(() => {
 		fetchProfileData();
 	}, [fetchProfileData]);
@@ -102,7 +108,19 @@ const ProfileData = () => {
 								<span className={classes["profile-bio"]}>
 									{profile.bio}
 								</span>
+								<button
+									type="button"
+									className={classes["bio-button"]}
+									onClick={() => handleBioChangeOpen()}
+								>
+									edit bio
+								</button>
 							</p>
+							{open && (
+								<Bio
+									handleBioChangeOpen={handleBioChangeOpen}
+								/>
+							)}
 						</div>
 					</div>
 					{checkIds(userId)}
