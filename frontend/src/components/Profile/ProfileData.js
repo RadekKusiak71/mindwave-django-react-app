@@ -108,13 +108,15 @@ const ProfileData = () => {
 								<span className={classes["profile-bio"]}>
 									{profile.bio}
 								</span>
-								<button
-									type="button"
-									className={classes["bio-button"]}
-									onClick={() => handleBioChangeOpen()}
-								>
-									edit bio
-								</button>
+								{userId == user.user_id && (
+									<button
+										type="button"
+										className={classes["bio-button"]}
+										onClick={() => handleBioChangeOpen()}
+									>
+										edit bio
+									</button>
+								)}
 							</p>
 							{open && (
 								<Bio
