@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/',include('api.urls')),
+    path('api/', include('api.urls')),
 ]
 
 # Configuration to set django server serve media files with debug = True
